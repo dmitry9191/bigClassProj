@@ -11,7 +11,7 @@ const modals = (state) => {
               /* lastForm = document.querySelector("[data-calc]"), */
               scroll = calcScroll();
 
-        let checkInputsResult = true;
+       /*  let checkInputsResult = true; */
 
         const closeWindows = () => {
             windows.forEach(item => {
@@ -73,7 +73,7 @@ const modals = (state) => {
             modal.style.display = "none";
             document.body.classList.remove('modal-open');
             document.body.style.marginRight = `0px`;
-      /*       document.body.style.overflow = ""; */
+      /*    document.body.style.overflow = ""; */
         });
 
         modal.addEventListener('click', (e) => {
