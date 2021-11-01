@@ -21,6 +21,16 @@ const forms = () => {
         question: 'assets/question.php'
     };
 
+    const clearInputs = () => {
+        inputs.forEach(item => {
+            item.value = '';
+        });
+    
+        upload.forEach(item => {
+            item.previousElementSibling.textContent = 'Файл не выбран';
+        });
+    };
+
     const postData = async (url, data) => {
             let res = await fetch(url, {
             method: 'POST',
@@ -30,16 +40,6 @@ const forms = () => {
         return await res.text() 
     };
 
-    const clearInputs = () => {
-        inputs.forEach(item => {
-            item.value = '';
-        });
-
-        upload.forEach(item => {
-            item.previousElementSibling.textContent = 'Файл не выбран';
-        });
-    };
-
     upload.forEach(item => {
         item.addEventListener('input', () => {
             console.log(item.files[0]);
@@ -47,7 +47,7 @@ const forms = () => {
             let dots;
             const arr =  item.files[0].name.split('.');
 
-           arr[0].length > 5 ? dots = '...' : dots = '.';
+            arr[0].length > 5 ? dots = '...' : dots = '.';
             const name = arr[0].substring(0, 6) + dots + arr[1];
 
             item.previousElementSibling.textContent = name;
