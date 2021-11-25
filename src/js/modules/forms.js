@@ -37,7 +37,7 @@ const forms = () => {
             body: data
         });
 
-        return await res.text() 
+        return await res.text(); 
     };
 
     upload.forEach(item => {
