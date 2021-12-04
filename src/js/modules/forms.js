@@ -1,5 +1,7 @@
 /* import checkNumInputs from "./checkNumInputs";*/
-const forms = () => {
+import {postData} from '../services/requests';
+
+const forms = (state) => {
 
     const form = document.querySelectorAll('form'),
           inputs = document.querySelectorAll('input'),
@@ -31,14 +33,6 @@ const forms = () => {
         });
     };
 
-    const postData = async (url, data) => {
-            let res = await fetch(url, {
-            method: 'POST',
-            body: data
-        });
-
-        return await res.text(); 
-    };
 
     upload.forEach(item => {
         item.addEventListener('input', () => {
@@ -78,11 +72,21 @@ const forms = () => {
 
             const formData = new FormData(item);
             
+            
             let api;
 
             item.closest('.popup-design') || item.classList.contains('calc-form') ? api = path.designer : api = path.question;
             console.log(api);
 
+            if (item.classList.contains('calc-form')) {
+                for (let key in state) {
+                    formData.append(key, state[key]);
+                }
+            }
+
+            console.log(state);
+
+            
             postData(api, formData)
                 .then(res => {
                     console.log(res);  
