@@ -2,7 +2,7 @@ const scrolling = (upSelector) => {
     const upElement = document.querySelector(upSelector);
     
     window.addEventListener('scroll', () => {
-        if (document.documentElement.scrollTop > 1650) {
+        if (document.documentElement.scrollTop > 1650) { // scrollTop показывает сколько px прокручено от верхней части элемента
             upElement.classList.add('animated', 'fadeIn');
             upElement.classList.remove('fadeOut');
         } else {
@@ -13,27 +13,38 @@ const scrolling = (upSelector) => {
 
     // scrolling with request animation frame
 
-    let links = document.querySelectorAll('[href^="#"]'),
-        speed = 0.7;
+    let links = document.querySelectorAll('[href^="#"]'), // выбираются все строки у которых параметр href начинается с #
+        speed = 0.3; // скорость прокрутки анимации, чем меньше значение, тем быстрее прокручивается
 
     links.forEach(link => {
         link.addEventListener('click', function(e) {
-            e.preventDefault;
+            e.preventDefault; // на случай если ссылка ведет к загрузке другой страницы
 
-            let widthTop = document.documentElement.scrollTop,
-                hash = this.hash,
-                toBlock = document.querySelector(hash).getBoundingClientRect().top, // метод позволяет получить доступ к св-ву top, верхней координате элемента 
-                start = null;
+            let heightTop = document.documentElement.scrollTop, // scrollTop показывает сколько px прокручено от верхней части страницы
+                hash = this.hash, // якорь страницы, начинается с # в адресной строке
+                toBlock = document.querySelector(hash).getBoundingClientRect().top, // метод получает доступ к св-ву top, верхней координате элементаБ куда прошли по ссылке 
+                start = null; // начальное время
 
-            requestAnimationFrame(step);
+                console.log(toBlock, heightTop);
 
-            function step(time) {
+            requestAnimationFrame(step); // вызываем вручную анимацию первый раз, потом вызывается коллбэк функцией step
+
+            function step(time) { // аргумент time - это timestamp текущего времени
                 if (start === null) {
-                    start = time;
+                    start = time; // устанавливает для start время запуска функции, срабатывает один раз в самом начале
                 }
 
-                let progress  = time - start;
-            }
+                let progress  = time - start, // содержит время с начала анимации
+                    r = (toBlock < 0 ? Math.max(heightTop - progress / speed, heightTop + toBlock) : Math.min(heightTop + progress / speed, heightTop + toBlock));
+                    // r - значение пикселей на которое сдвигается кадр в каждое исполнение коллбэк-функции
+                document.documentElement.scrollTo(0, r);
+
+                if (r !== heightTop + toBlock) { 
+                    requestAnimationFrame(step); // функция вызывается до тех пор...
+                } else {
+                    location.hash = hash; // пока значение r не становится равно сумме heightTop и toBlock,
+                }                         // после чего в св-во hash объекта location записывается this.hash. то есть значение якоря href="#some" куда мы перешли
+            }                             // и показывается в адресной строке
         });
     });
 };
@@ -96,3 +107,4 @@ export default scrolling;
     };
 
     calcScroll(); */
+    
