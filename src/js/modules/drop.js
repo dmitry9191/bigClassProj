@@ -1,3 +1,5 @@
+import {postData} from "../services/requests";
+
 const drop = () => {
     // dragenter - объект над dropArea
     // dragleave - объект за пределами dropArea
@@ -30,7 +32,16 @@ const drop = () => {
     fileInputs.forEach(input => {
         input.addEventListener('drop', (e) => {
             input.files = e.dataTransfer.files; // dataTransfer - объект, хранящий передающиеся файлы, .files - св-во в котором непосредственно хранятся файлы
-            
+            if (input.closest('.main')) {
+                
+                const formData = new FormData();
+                
+                formData.append('data', input.files[0]);
+
+                postData('./assets/server.php', formData)
+                    .then(res => console.log(res));
+            }
+
             let dots;
             const arr =  input.files[0].name.split('.');
 
